@@ -40,15 +40,24 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.button3 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button5 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.select2 = new System.Windows.Forms.ComboBox();
             this.button4 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.button5 = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.label5 = new System.Windows.Forms.Label();
+            this.select3 = new System.Windows.Forms.ComboBox();
+            this.select4 = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.button7 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -134,6 +143,7 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(12, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -184,6 +194,16 @@
             this.tabPage2.Text = "曲率半径计算";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(868, 191);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 13;
+            this.button5.Text = "导出结果";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -226,15 +246,88 @@
             this.dataGridView1.Size = new System.Drawing.Size(811, 441);
             this.dataGridView1.TabIndex = 0;
             // 
-            // button5
+            // tabPage3
             // 
-            this.button5.Location = new System.Drawing.Point(868, 191);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 13;
-            this.button5.Text = "导出结果";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.tabPage3.Controls.Add(this.button7);
+            this.tabPage3.Controls.Add(this.label6);
+            this.tabPage3.Controls.Add(this.select4);
+            this.tabPage3.Controls.Add(this.label5);
+            this.tabPage3.Controls.Add(this.select3);
+            this.tabPage3.Controls.Add(this.dataGridView2);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(1051, 550);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "高斯正反算";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // dataGridView2
+            // 
+            this.dataGridView2.AllowUserToAddRows = false;
+            this.dataGridView2.AllowUserToDeleteRows = false;
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Location = new System.Drawing.Point(17, 20);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.ReadOnly = true;
+            this.dataGridView2.RowTemplate.Height = 23;
+            this.dataGridView2.Size = new System.Drawing.Size(754, 441);
+            this.dataGridView2.TabIndex = 0;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(836, 20);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(53, 12);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "选择椭球";
+            // 
+            // select3
+            // 
+            this.select3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.select3.FormattingEnabled = true;
+            this.select3.Items.AddRange(new object[] {
+            "WGS84",
+            "CGCS2000",
+            "西安80"});
+            this.select3.Location = new System.Drawing.Point(836, 47);
+            this.select3.Name = "select3";
+            this.select3.Size = new System.Drawing.Size(121, 20);
+            this.select3.TabIndex = 13;
+            this.select3.SelectedIndexChanged += new System.EventHandler(this.select3_SelectedIndexChanged);
+            // 
+            // select4
+            // 
+            this.select4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.select4.FormattingEnabled = true;
+            this.select4.Items.AddRange(new object[] {
+            "3度带",
+            "6度带"});
+            this.select4.Location = new System.Drawing.Point(838, 130);
+            this.select4.Name = "select4";
+            this.select4.Size = new System.Drawing.Size(121, 20);
+            this.select4.TabIndex = 15;
+            this.select4.SelectedIndexChanged += new System.EventHandler(this.select4_SelectedIndexChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(836, 96);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(77, 12);
+            this.label6.TabIndex = 16;
+            this.label6.Text = "选择投影带宽";
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(836, 196);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(123, 23);
+            this.button7.TabIndex = 18;
+            this.button7.Text = "高斯正算";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // Form1
             // 
@@ -251,6 +344,9 @@
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -274,6 +370,13 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox select2;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox select4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox select3;
+        private System.Windows.Forms.Button button7;
     }
 }
 
