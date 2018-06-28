@@ -33,6 +33,7 @@ namespace Converter
                 f = value;
             }
         }
+        //M N R RA计算
         public double[] calculate_MNR(double B)
         {
             double V, e4, b, c, M, N, R, RA30, RA60;

@@ -20,7 +20,9 @@ namespace Converter
         private void Form1_Load(object sender, EventArgs e)
         {
             select.SelectedIndex = select.Items.IndexOf("WGS84");
-            select2.SelectedIndex = select.Items.IndexOf("WGS84");
+            select2.SelectedIndex = select2.Items.IndexOf("WGS84");
+            select3.SelectedIndex = select3.Items.IndexOf("WGS84");
+            select4.SelectedIndex = select4.Items.IndexOf("3度带");
             init_DataGridview();
         }
         BLH2XYZ conv = new BLH2XYZ();
@@ -103,8 +105,10 @@ namespace Converter
         }
         //初始化Tab2的DataGridView
         DataTable dt = new DataTable();
+        DataTable dt2 = new DataTable();
         private void init_DataGridview()
         {
+            //曲率半径datagridview
             dt.Columns.Add("B", typeof(double));
             dt.Columns.Add("M", typeof(double));
             dt.Columns.Add("N", typeof(double));
@@ -124,6 +128,12 @@ namespace Converter
             dataGridView1.Columns["R"].HeaderText = "平均曲率半径";
             dataGridView1.Columns["RA30"].HeaderText = "大地方位角30°时曲率半径";
             dataGridView1.Columns["RA60"].HeaderText = "大地方位角60°时曲率半径";
+            //高斯正反算datagridview
+            dt2.Columns.Add("L", typeof(double));
+            dt2.Columns.Add("B", typeof(double));
+            dt2.Columns.Add("y", typeof(double));
+            dt2.Columns.Add("x", typeof(double));
+            dataGridView2.DataSource = dt2;
         }
         //计算M N R RA
         private void button4_Click(object sender, EventArgs e)
@@ -157,7 +167,7 @@ namespace Converter
                     break;
             }
         }
-
+        //导出曲率半径计算结果
         private void button5_Click(object sender, EventArgs e)
         {
             SaveFileDialog save = new SaveFileDialog();
@@ -172,22 +182,82 @@ namespace Converter
             string header = "";
             foreach(DataGridViewColumn col in dataGridView1.Columns)
             {
-                header += col.HeaderText+"\t\t";
+                header += col.HeaderText + "\t\t";
             }
-            header.Substring(0, header.Length - 1);
+            header.Substring(0, header.Length - 2);
             wt.WriteLine(header);
             foreach(DataRow row in dt.Rows)
             {
+                wt.Write(row[0].ToString());
                 string temp = "";
                 for (int i=1;i<dt.Columns.Count;i++)
                 {
-                    temp += row[i].ToString() + "\t\t";
+                    temp += "\t" + string.Format("{0:f8}",row[i]) + "\t";
                 }
                 temp.Substring(0, temp.Length - 1);
                 wt.WriteLine(temp);
             }
             wt.Close();
             fs.Close();
+        }
+        //选择投影带宽
+        Gauss gauss = new Gauss();
+        private void select4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (select4.SelectedItem.ToString())
+            {
+                case "3度带":
+                    gauss.WIDTH = 3;
+                    break;
+                case "6度带":
+                    gauss.WIDTH = 6;
+                    break;
+            }
+        }
+        //选择高斯投影椭球
+        private void select3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (select3.SelectedItem.ToString())
+            {
+                case "WGS84":
+                    gauss.A = 6378137;
+                    gauss.F = 1 / 298.257223563;
+                    break;
+                case "CGCS2000":
+                    gauss.A = 6378137;
+                    gauss.F = 1 / 298.257222101;
+                    break;
+                case "西安80":
+                    gauss.A = 6378140;
+                    gauss.F = 1 / 298.257;
+                    break;
+            }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog open = new OpenFileDialog();
+            open.Filter = "文本文件(*.txt)|*.txt";
+            open.ShowDialog();
+            if(open.FileName == "")
+            {
+                return;
+            }
+            FileOperate fo = new FileOperate();
+            List<double[]> data = fo.ReadFile(open.FileName);
+            foreach(double[] ele in data)
+            {
+                DataRow new_row = dt2.NewRow();
+                new_row["L"] = ele[0];
+                new_row["B"] = ele[1];
+                dt2.Rows.Add(new_row);
+            }
+            foreach(DataRow row in dt2.Rows)
+            {
+                 double[]yx_arr = gauss.gauss_positive((double)row["L"], (double)row["B"]);
+                 row["y"] = yx_arr[0];
+                 row["x"] = yx_arr[1];
+            }
         }
     }
 }
