@@ -172,16 +172,17 @@ namespace Converter
             string header = "";
             foreach(DataGridViewColumn col in dataGridView1.Columns)
             {
-                header += col.HeaderText+"\t\t";
+                header += col.HeaderText + "\t\t";
             }
-            header.Substring(0, header.Length - 1);
+            header.Substring(0, header.Length - 2);
             wt.WriteLine(header);
             foreach(DataRow row in dt.Rows)
             {
+                wt.Write(row[0].ToString());
                 string temp = "";
                 for (int i=1;i<dt.Columns.Count;i++)
                 {
-                    temp += row[i].ToString() + "\t\t";
+                    temp += "\t" + string.Format("{0:f8}",row[i]) + "\t";
                 }
                 temp.Substring(0, temp.Length - 1);
                 wt.WriteLine(temp);
