@@ -181,7 +181,7 @@ namespace Converter
                 string temp = "";
                 for (int i=1;i<dt.Columns.Count;i++)
                 {
-                    temp += row[i].ToString("#0.00") + "\t\t";
+                    temp += row[i].ToString() + "\t\t";
                 }
                 temp.Substring(0, temp.Length - 1);
                 wt.WriteLine(temp);
