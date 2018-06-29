@@ -52,6 +52,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.select3 = new System.Windows.Forms.ComboBox();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -248,6 +250,8 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.button8);
+            this.tabPage3.Controls.Add(this.button6);
             this.tabPage3.Controls.Add(this.button7);
             this.tabPage3.Controls.Add(this.label6);
             this.tabPage3.Controls.Add(this.select4);
@@ -329,6 +333,26 @@
             this.dataGridView2.Size = new System.Drawing.Size(754, 441);
             this.dataGridView2.TabIndex = 0;
             // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(838, 345);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(119, 23);
+            this.button6.TabIndex = 19;
+            this.button6.Text = "导出结果";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(834, 265);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(123, 23);
+            this.button8.TabIndex = 20;
+            this.button8.Text = "高斯反算";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -377,6 +401,8 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox select3;
         private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button8;
     }
 }
 

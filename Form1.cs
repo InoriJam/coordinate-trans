@@ -177,28 +177,8 @@ namespace Converter
             {
                 return;
             }
-            FileStream fs = new FileStream(save.FileName, FileMode.Create);
-            StreamWriter wt = new StreamWriter(fs);
-            string header = "";
-            foreach(DataGridViewColumn col in dataGridView1.Columns)
-            {
-                header += col.HeaderText + "\t\t";
-            }
-            header.Substring(0, header.Length - 2);
-            wt.WriteLine(header);
-            foreach(DataRow row in dt.Rows)
-            {
-                wt.Write(row[0].ToString());
-                string temp = "";
-                for (int i=1;i<dt.Columns.Count;i++)
-                {
-                    temp += "\t" + string.Format("{0:f8}",row[i]) + "\t";
-                }
-                temp.Substring(0, temp.Length - 1);
-                wt.WriteLine(temp);
-            }
-            wt.Close();
-            fs.Close();
+            FileOperate fo = new FileOperate();
+            fo.datagrid_ExportFile(save.FileName, dataGridView1, dt);
         }
         //选择投影带宽
         Gauss gauss = new Gauss();
@@ -233,9 +213,15 @@ namespace Converter
                     break;
             }
         }
-
+        //高斯正反算结果存储
+        List<double[]> gauss_positive_res = new List<double[]>();
+        List<double[]> gauss_negative_res = new List<double[]>();
+        //高斯正算
         private void button7_Click(object sender, EventArgs e)
         {
+            gauss_positive_res.Clear();
+            gauss_negative_res.Clear();
+            dt2.Rows.Clear();
             OpenFileDialog open = new OpenFileDialog();
             open.Filter = "文本文件(*.txt)|*.txt";
             open.ShowDialog();
@@ -255,8 +241,64 @@ namespace Converter
             foreach(DataRow row in dt2.Rows)
             {
                  double[]yx_arr = gauss.gauss_positive((double)row["L"], (double)row["B"]);
+                 gauss_positive_res.Add(yx_arr);
                  row["y"] = yx_arr[0];
                  row["x"] = yx_arr[1];
+            }
+        }
+        //高斯正反算结果导出
+        private void button6_Click(object sender, EventArgs e)
+        {
+            FileOperate fo = new FileOperate();
+            SaveFileDialog save = new SaveFileDialog();
+            save.Filter = "文本文件(*.txt)|*.txt";
+            save.ShowDialog();
+            if (save.FileName == "")
+            {
+                return;
+            }
+            if(gauss_positive_res.Count == 0 && gauss_negative_res.Count == 0)
+            {
+                MessageBox.Show("请先进行计算！");
+                return;
+            }
+            else if (gauss_positive_res.Count != 0)
+            {
+                fo.ExportFile(save.FileName, gauss_positive_res);
+            }
+            else if (gauss_negative_res.Count != 0)
+            {
+                fo.ExportFile(save.FileName, gauss_negative_res);
+            }
+        }
+        //高斯反算
+        private void button8_Click(object sender, EventArgs e)
+        {
+            gauss_positive_res.Clear();
+            gauss_negative_res.Clear();
+            dt2.Rows.Clear();
+            OpenFileDialog open = new OpenFileDialog();
+            open.Filter = "文本文件(*.txt)|*.txt";
+            open.ShowDialog();
+            if (open.FileName == "")
+            {
+                return;
+            }
+            FileOperate fo = new FileOperate();
+            List<double[]> data = fo.ReadFile(open.FileName);
+            foreach (double[] ele in data)
+            {
+                DataRow new_row = dt2.NewRow();
+                new_row["y"] = ele[0];
+                new_row["x"] = ele[1];
+                dt2.Rows.Add(new_row);
+            }
+            foreach (DataRow row in dt2.Rows)
+            {
+                double[] LB_arr = gauss.gauss_negative((double)row["y"], (double)row["x"]);
+                gauss_negative_res.Add(LB_arr);
+                row["L"] = LB_arr[0];
+                row["B"] = LB_arr[1];
             }
         }
     }
