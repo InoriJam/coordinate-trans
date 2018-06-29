@@ -23,6 +23,11 @@ namespace Converter
             select2.SelectedIndex = select2.Items.IndexOf("WGS84");
             select3.SelectedIndex = select3.Items.IndexOf("WGS84");
             select4.SelectedIndex = select4.Items.IndexOf("3度带");
+            comboBox1.SelectedIndex = comboBox1.Items.IndexOf("四参数");
+            groupBox2.Location = new Point(724, 97);
+            groupBox3.Location = new Point(724, 97);
+            groupBox2.Visible = false;
+            groupBox3.Visible = false;
             init_DataGridview();
         }
         BLH2XYZ conv = new BLH2XYZ();
@@ -106,6 +111,8 @@ namespace Converter
         //初始化Tab2的DataGridView
         DataTable dt = new DataTable();
         DataTable dt2 = new DataTable();
+        DataTable dt3 = new DataTable();
+        DataTable dt4 = new DataTable();
         private void init_DataGridview()
         {
             //曲率半径datagridview
@@ -134,6 +141,18 @@ namespace Converter
             dt2.Columns.Add("y", typeof(double));
             dt2.Columns.Add("x", typeof(double));
             dataGridView2.DataSource = dt2;
+            //四参数解算datagridview
+            dt3.Columns.Add("X0", typeof(double));
+            dt3.Columns.Add("Y0", typeof(double));
+            dt3.Columns.Add("X1", typeof(double));
+            dt3.Columns.Add("Y1", typeof(double));
+            dataGridView3.DataSource = dt3;
+            //四参数转换的datagridview
+            dt4.Columns.Add("X0", typeof(double));
+            dt4.Columns.Add("Y0", typeof(double));
+            dt4.Columns.Add("X1", typeof(double));
+            dt4.Columns.Add("Y1", typeof(double));
+            dataGridView4.DataSource = dt4;
         }
         //计算M N R RA
         private void button4_Click(object sender, EventArgs e)
@@ -177,28 +196,8 @@ namespace Converter
             {
                 return;
             }
-            FileStream fs = new FileStream(save.FileName, FileMode.Create);
-            StreamWriter wt = new StreamWriter(fs);
-            string header = "";
-            foreach(DataGridViewColumn col in dataGridView1.Columns)
-            {
-                header += col.HeaderText + "\t\t";
-            }
-            header.Substring(0, header.Length - 2);
-            wt.WriteLine(header);
-            foreach(DataRow row in dt.Rows)
-            {
-                wt.Write(row[0].ToString());
-                string temp = "";
-                for (int i=1;i<dt.Columns.Count;i++)
-                {
-                    temp += "\t" + string.Format("{0:f8}",row[i]) + "\t";
-                }
-                temp.Substring(0, temp.Length - 1);
-                wt.WriteLine(temp);
-            }
-            wt.Close();
-            fs.Close();
+            FileOperate fo = new FileOperate();
+            fo.datagrid_ExportFile(save.FileName, dataGridView1, dt);
         }
         //选择投影带宽
         Gauss gauss = new Gauss();
@@ -233,9 +232,15 @@ namespace Converter
                     break;
             }
         }
-
+        //高斯正反算结果存储
+        List<double[]> gauss_positive_res = new List<double[]>();
+        List<double[]> gauss_negative_res = new List<double[]>();
+        //高斯正算
         private void button7_Click(object sender, EventArgs e)
         {
+            gauss_positive_res.Clear();
+            gauss_negative_res.Clear();
+            dt2.Rows.Clear();
             OpenFileDialog open = new OpenFileDialog();
             open.Filter = "文本文件(*.txt)|*.txt";
             open.ShowDialog();
@@ -255,9 +260,165 @@ namespace Converter
             foreach(DataRow row in dt2.Rows)
             {
                  double[]yx_arr = gauss.gauss_positive((double)row["L"], (double)row["B"]);
+                 gauss_positive_res.Add(yx_arr);
                  row["y"] = yx_arr[0];
                  row["x"] = yx_arr[1];
             }
+        }
+        //高斯正反算结果导出
+        private void button6_Click(object sender, EventArgs e)
+        {
+            FileOperate fo = new FileOperate();
+            SaveFileDialog save = new SaveFileDialog();
+            save.Filter = "文本文件(*.txt)|*.txt";
+            save.ShowDialog();
+            if (save.FileName == "")
+            {
+                return;
+            }
+            if(gauss_positive_res.Count == 0 && gauss_negative_res.Count == 0)
+            {
+                MessageBox.Show("请先进行计算！");
+                return;
+            }
+            else if (gauss_positive_res.Count != 0)
+            {
+                fo.ExportFile(save.FileName, gauss_positive_res);
+            }
+            else if (gauss_negative_res.Count != 0)
+            {
+                fo.ExportFile(save.FileName, gauss_negative_res);
+            }
+        }
+        //高斯反算
+        private void button8_Click(object sender, EventArgs e)
+        {
+            gauss_positive_res.Clear();
+            gauss_negative_res.Clear();
+            dt2.Rows.Clear();
+            OpenFileDialog open = new OpenFileDialog();
+            open.Filter = "文本文件(*.txt)|*.txt";
+            open.ShowDialog();
+            if (open.FileName == "")
+            {
+                return;
+            }
+            FileOperate fo = new FileOperate();
+            List<double[]> data = fo.ReadFile(open.FileName);
+            foreach (double[] ele in data)
+            {
+                DataRow new_row = dt2.NewRow();
+                new_row["y"] = ele[0];
+                new_row["x"] = ele[1];
+                dt2.Rows.Add(new_row);
+            }
+            foreach (DataRow row in dt2.Rows)
+            {
+                double[] LB_arr = gauss.gauss_negative((double)row["y"], (double)row["x"]);
+                gauss_negative_res.Add(LB_arr);
+                row["L"] = LB_arr[0];
+                row["B"] = LB_arr[1];
+            }
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog open = new OpenFileDialog();
+            open.Filter = "文本文件(*.txt)|*.txt";
+            open.ShowDialog();
+            if (open.FileName == "")
+            {
+                return;
+            }
+            FileOperate fo = new FileOperate();
+            List<double[]> data = fo.ReadFile(open.FileName);
+            //分离源坐标系和目标坐标系的坐标
+            List<double[]> src = new List<double[]>();
+            List<double[]> dst = new List<double[]>();
+            foreach (double[] arr in data)
+            {
+                //datagridview显示
+                DataRow new_row = dt3.NewRow();
+                new_row["X0"] = arr[0];
+                new_row["Y0"] = arr[1];
+                new_row["X1"] = arr[2];
+                new_row["Y1"] = arr[3];
+                dt3.Rows.Add(new_row);
+                double[] left = { arr[0], arr[1] };
+                double[] right = { arr[2], arr[3] };
+                src.Add(left);
+                dst.Add(right);
+            }
+            _347 tfs = new _347();
+            double[] param_arr = tfs.four_solve(src,dst);
+            textBox1.Text = param_arr[0].ToString();
+            textBox2.Text = param_arr[1].ToString();
+            textBox3.Text = param_arr[2].ToString();
+            textBox4.Text = param_arr[3].ToString();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (comboBox1.SelectedItem.ToString())
+            {
+                case "四参数":
+                    groupBox2.Visible = false;
+                    groupBox3.Visible = false;
+                    groupBox1.Visible = true;
+                    break;
+                case "七参数":
+                    groupBox1.Visible = false;
+                    groupBox3.Visible = false;
+                    groupBox2.Visible = true;
+                    break;
+                case "三参数":
+                    groupBox1.Visible = false;
+                    groupBox2.Visible = false;
+                    groupBox3.Visible = true;
+                    break;
+            }
+        }
+        //四参数转换
+        //存储四参数转换结果
+        List<double[]> four_trans_res = new List<double[]>();
+        private void button10_Click(object sender, EventArgs e)
+        {
+            dt4.Rows.Clear();
+            OpenFileDialog open = new OpenFileDialog();
+            open.Filter = "文本文件(*.txt)|*.txt";
+            open.ShowDialog();
+            if (open.FileName == "")
+            {
+                return;
+            }
+            FileOperate fo = new FileOperate();
+            List<double[]> data = fo.ReadFile(open.FileName);
+            _347 tfs = new _347();
+            foreach (double[] arr in data)
+            {
+                //datagridview显示
+                DataRow new_row = dt4.NewRow();
+                new_row["X0"] = arr[0];
+                new_row["Y0"] = arr[1];
+                double[] four_arr = tfs.four_trans(arr,Convert.ToDouble( dX_box.Text), Convert.ToDouble(dY_box.Text), Convert.ToDouble(theata_box.Text), Convert.ToDouble(m_box.Text));
+                new_row["X1"] = four_arr[0];
+                new_row["Y1"] = four_arr[1];
+                dt4.Rows.Add(new_row);
+                four_trans_res.Add(four_arr);
+            }
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            FileOperate fo = new FileOperate();
+            SaveFileDialog save = new SaveFileDialog();
+            save.Filter = "文本文件(*.txt)|*.txt";
+            save.ShowDialog();
+            if (save.FileName == "")
+            {
+                return;
+            }
+            fo.ExportFile(save.FileName, four_trans_res);
         }
     }
 }
