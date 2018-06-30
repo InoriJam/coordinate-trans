@@ -351,6 +351,14 @@ namespace Converter
                     groupBox1.Visible = false;
                     groupBox2.Visible = false;
                     groupBox3.Visible = true;
+                    dt4.Rows.Clear();
+                    dt4.Columns.Clear();
+                    dt4.Columns.Add("X0", typeof(double));
+                    dt4.Columns.Add("Y0", typeof(double));
+                    dt4.Columns.Add("Z0", typeof(double));
+                    dt4.Columns.Add("X1", typeof(double));
+                    dt4.Columns.Add("Y1", typeof(double));
+                    dt4.Columns.Add("Z1", typeof(double));
                     break;
             }
         }
@@ -397,7 +405,15 @@ namespace Converter
                         trans_res.Add(seven_res_arr);
                         break;
                     case "三参数":
-                        MessageBox.Show("开发中");
+                        new_row["X0"] = arr[0];
+                        new_row["Y0"] = arr[1];
+                        new_row["Z0"] = arr[2];
+                        double[] three_res_arr = tfs.three_trans(arr,t_Dx_box.Text, t_Dy_box.Text, t_Dz_box.Text);
+                        new_row["X1"] = three_res_arr[0];
+                        new_row["Y1"] = three_res_arr[1];
+                        new_row["Z1"] = three_res_arr[2];
+                        dt4.Rows.Add(new_row);
+                        trans_res.Add(three_res_arr);
                         break;
                 }
             }
@@ -527,6 +543,32 @@ namespace Converter
                     Ry_box.Text = seven_param_arr[4].ToString();
                     Rz_box.Text = seven_param_arr[5].ToString();
                     D_box.Text = seven_param_arr[6].ToString();
+                    break;
+                case "三参数":
+                    //分离源坐标系和目标坐标系的坐标
+                    List<double[]> three_src = new List<double[]>();
+                    List<double[]> three_dst = new List<double[]>();
+                    foreach (double[] arr in data)
+                    {
+                        //datagridview显示
+                        DataRow new_row = dt4.NewRow();
+                        new_row["X0"] = arr[0];
+                        new_row["Y0"] = arr[1];
+                        new_row["Z0"] = arr[2];
+                        new_row["X1"] = arr[3];
+                        new_row["Y1"] = arr[4];
+                        new_row["Z1"] = arr[5];
+                        dt4.Rows.Add(new_row);
+                        double[] left = { arr[0], arr[1], arr[2] };
+                        double[] right = { arr[3], arr[4], arr[5] };
+                        three_src.Add(left);
+                        three_dst.Add(right);
+                    }
+                    _347 three_tfs = new _347();
+                    double[] three_param_arr = three_tfs.three_solve(three_src, three_dst);
+                    t_Dx_box.Text = three_param_arr[0].ToString();
+                    t_Dy_box.Text = three_param_arr[1].ToString();
+                    t_Dz_box.Text = three_param_arr[2].ToString();
                     break;
             }
         }

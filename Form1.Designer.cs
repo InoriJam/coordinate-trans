@@ -74,11 +74,9 @@
             this.label18 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.textBox9 = new System.Windows.Forms.TextBox();
-            this.textBox10 = new System.Windows.Forms.TextBox();
-            this.textBox11 = new System.Windows.Forms.TextBox();
-            this.textBox12 = new System.Windows.Forms.TextBox();
-            this.label20 = new System.Windows.Forms.Label();
+            this.t_Dz_box = new System.Windows.Forms.TextBox();
+            this.t_Dy_box = new System.Windows.Forms.TextBox();
+            this.t_Dx_box = new System.Windows.Forms.TextBox();
             this.label21 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
@@ -596,11 +594,9 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.textBox9);
-            this.groupBox3.Controls.Add(this.textBox10);
-            this.groupBox3.Controls.Add(this.textBox11);
-            this.groupBox3.Controls.Add(this.textBox12);
-            this.groupBox3.Controls.Add(this.label20);
+            this.groupBox3.Controls.Add(this.t_Dz_box);
+            this.groupBox3.Controls.Add(this.t_Dy_box);
+            this.groupBox3.Controls.Add(this.t_Dx_box);
             this.groupBox3.Controls.Add(this.label21);
             this.groupBox3.Controls.Add(this.label22);
             this.groupBox3.Controls.Add(this.label23);
@@ -611,47 +607,29 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "输入三参数";
             // 
-            // textBox9
+            // t_Dz_box
             // 
-            this.textBox9.Location = new System.Drawing.Point(94, 159);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.ReadOnly = true;
-            this.textBox9.Size = new System.Drawing.Size(100, 21);
-            this.textBox9.TabIndex = 16;
+            this.t_Dz_box.Location = new System.Drawing.Point(94, 121);
+            this.t_Dz_box.Name = "t_Dz_box";
+            this.t_Dz_box.ReadOnly = true;
+            this.t_Dz_box.Size = new System.Drawing.Size(100, 21);
+            this.t_Dz_box.TabIndex = 15;
             // 
-            // textBox10
+            // t_Dy_box
             // 
-            this.textBox10.Location = new System.Drawing.Point(94, 121);
-            this.textBox10.Name = "textBox10";
-            this.textBox10.ReadOnly = true;
-            this.textBox10.Size = new System.Drawing.Size(100, 21);
-            this.textBox10.TabIndex = 15;
+            this.t_Dy_box.Location = new System.Drawing.Point(94, 71);
+            this.t_Dy_box.Name = "t_Dy_box";
+            this.t_Dy_box.ReadOnly = true;
+            this.t_Dy_box.Size = new System.Drawing.Size(100, 21);
+            this.t_Dy_box.TabIndex = 14;
             // 
-            // textBox11
+            // t_Dx_box
             // 
-            this.textBox11.Location = new System.Drawing.Point(94, 71);
-            this.textBox11.Name = "textBox11";
-            this.textBox11.ReadOnly = true;
-            this.textBox11.Size = new System.Drawing.Size(100, 21);
-            this.textBox11.TabIndex = 14;
-            // 
-            // textBox12
-            // 
-            this.textBox12.Location = new System.Drawing.Point(94, 30);
-            this.textBox12.Name = "textBox12";
-            this.textBox12.ReadOnly = true;
-            this.textBox12.Size = new System.Drawing.Size(100, 21);
-            this.textBox12.TabIndex = 13;
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label20.Location = new System.Drawing.Point(21, 158);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(16, 16);
-            this.label20.TabIndex = 12;
-            this.label20.Text = "m";
+            this.t_Dx_box.Location = new System.Drawing.Point(94, 30);
+            this.t_Dx_box.Name = "t_Dx_box";
+            this.t_Dx_box.ReadOnly = true;
+            this.t_Dx_box.Size = new System.Drawing.Size(100, 21);
+            this.t_Dx_box.TabIndex = 13;
             // 
             // label21
             // 
@@ -659,9 +637,9 @@
             this.label21.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label21.Location = new System.Drawing.Point(21, 120);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(24, 16);
+            this.label21.Size = new System.Drawing.Size(26, 16);
             this.label21.TabIndex = 11;
-            this.label21.Text = "θ";
+            this.label21.Text = "∆Z";
             // 
             // label22
             // 
@@ -893,11 +871,9 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.TextBox textBox9;
-        private System.Windows.Forms.TextBox textBox10;
-        private System.Windows.Forms.TextBox textBox11;
-        private System.Windows.Forms.TextBox textBox12;
-        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox t_Dz_box;
+        private System.Windows.Forms.TextBox t_Dy_box;
+        private System.Windows.Forms.TextBox t_Dx_box;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label label23;
