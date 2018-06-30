@@ -60,5 +60,36 @@ namespace Converter
             Matrix res = e1 + e2 + e3 * e4;
             return res.mat;
         }
+        //三参数求解
+        public double[] three_solve(List<double[]> src, List<double[]> dst)
+        {
+            double sum_dX = 0;
+            double sum_dY = 0;
+            double sum_dZ = 0;
+            double Dx, Dy, Dz;
+            for (int i = 0; i < dst.Count; i++)
+            {
+                Dx = dst[i][0] - src[i][0];
+                Dy = dst[i][1] - src[i][1];
+                Dz = dst[i][2] - src[i][2];
+                sum_dX += Dx;
+                sum_dY += Dy;
+                sum_dZ += Dz;
+            }
+            Dx = sum_dX / dst.Count;
+            Dy = sum_dY / dst.Count;
+            Dz = sum_dZ / dst.Count;
+            double[] Dxyz_arr = { Dx, Dy, Dz };
+            return Dxyz_arr;
+        }
+        //三参数转换
+        public double[] three_trans (double[] src, string Dx, string Dy, string Dz)
+        {
+            double X1 = src[0] + Convert.ToDouble(Dx);
+            double Y1 = src[1] + Convert.ToDouble(Dy);
+            double Z1 = src[2] + Convert.ToDouble(Dz);
+            double[] res = { X1, Y1, Z1 };
+            return res;
+        }
     }
 }
