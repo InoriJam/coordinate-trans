@@ -28,6 +28,8 @@ namespace Converter
             groupBox3.Location = new Point(724, 97);
             groupBox2.Visible = false;
             groupBox3.Visible = false;
+            checkBox1.Checked = true;
+            button12.Enabled = false;
             init_DataGridview();
         }
         BLH2XYZ conv = new BLH2XYZ();
@@ -141,17 +143,11 @@ namespace Converter
             dt2.Columns.Add("y", typeof(double));
             dt2.Columns.Add("x", typeof(double));
             dataGridView2.DataSource = dt2;
-            //四参数解算datagridview
-            dt3.Columns.Add("X0", typeof(double));
-            dt3.Columns.Add("Y0", typeof(double));
-            dt3.Columns.Add("X1", typeof(double));
-            dt3.Columns.Add("Y1", typeof(double));
-            dataGridView3.DataSource = dt3;
             //四参数转换的datagridview
-            dt4.Columns.Add("X0", typeof(double));
+            /*dt4.Columns.Add("X0", typeof(double));
             dt4.Columns.Add("Y0", typeof(double));
             dt4.Columns.Add("X1", typeof(double));
-            dt4.Columns.Add("Y1", typeof(double));
+            dt4.Columns.Add("Y1", typeof(double));*/
             dataGridView4.DataSource = dt4;
         }
         //计算M N R RA
@@ -321,41 +317,6 @@ namespace Converter
             }
         }
 
-        private void button9_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog open = new OpenFileDialog();
-            open.Filter = "文本文件(*.txt)|*.txt";
-            open.ShowDialog();
-            if (open.FileName == "")
-            {
-                return;
-            }
-            FileOperate fo = new FileOperate();
-            List<double[]> data = fo.ReadFile(open.FileName);
-            //分离源坐标系和目标坐标系的坐标
-            List<double[]> src = new List<double[]>();
-            List<double[]> dst = new List<double[]>();
-            foreach (double[] arr in data)
-            {
-                //datagridview显示
-                DataRow new_row = dt3.NewRow();
-                new_row["X0"] = arr[0];
-                new_row["Y0"] = arr[1];
-                new_row["X1"] = arr[2];
-                new_row["Y1"] = arr[3];
-                dt3.Rows.Add(new_row);
-                double[] left = { arr[0], arr[1] };
-                double[] right = { arr[2], arr[3] };
-                src.Add(left);
-                dst.Add(right);
-            }
-            _347 tfs = new _347();
-            double[] param_arr = tfs.four_solve(src,dst);
-            textBox1.Text = param_arr[0].ToString();
-            textBox2.Text = param_arr[1].ToString();
-            textBox3.Text = param_arr[2].ToString();
-            textBox4.Text = param_arr[3].ToString();
-        }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -365,11 +326,26 @@ namespace Converter
                     groupBox2.Visible = false;
                     groupBox3.Visible = false;
                     groupBox1.Visible = true;
+                    dt4.Rows.Clear();
+                    dt4.Columns.Clear();
+                    dt4.Columns.Add("X0", typeof(double));
+                    dt4.Columns.Add("Y0", typeof(double));
+                    dt4.Columns.Add("X1", typeof(double));
+                    dt4.Columns.Add("Y1", typeof(double));
                     break;
                 case "七参数":
                     groupBox1.Visible = false;
                     groupBox3.Visible = false;
                     groupBox2.Visible = true;
+                    //清空dt4，重新生成字段
+                    dt4.Rows.Clear();
+                    dt4.Columns.Clear();
+                    dt4.Columns.Add("X0", typeof(double));
+                    dt4.Columns.Add("Y0", typeof(double));
+                    dt4.Columns.Add("Z0", typeof(double));
+                    dt4.Columns.Add("X1", typeof(double));
+                    dt4.Columns.Add("Y1", typeof(double));
+                    dt4.Columns.Add("Z1", typeof(double));
                     break;
                 case "三参数":
                     groupBox1.Visible = false;
@@ -378,12 +354,13 @@ namespace Converter
                     break;
             }
         }
-        //四参数转换
-        //存储四参数转换结果
-        List<double[]> four_trans_res = new List<double[]>();
+        //参数转换
+        //存储转换结果
+        List<double[]> trans_res = new List<double[]>();
         private void button10_Click(object sender, EventArgs e)
         {
             dt4.Rows.Clear();
+            trans_res.Clear();
             OpenFileDialog open = new OpenFileDialog();
             open.Filter = "文本文件(*.txt)|*.txt";
             open.ShowDialog();
@@ -398,13 +375,31 @@ namespace Converter
             {
                 //datagridview显示
                 DataRow new_row = dt4.NewRow();
-                new_row["X0"] = arr[0];
-                new_row["Y0"] = arr[1];
-                double[] four_arr = tfs.four_trans(arr,Convert.ToDouble( dX_box.Text), Convert.ToDouble(dY_box.Text), Convert.ToDouble(theata_box.Text), Convert.ToDouble(m_box.Text));
-                new_row["X1"] = four_arr[0];
-                new_row["Y1"] = four_arr[1];
-                dt4.Rows.Add(new_row);
-                four_trans_res.Add(four_arr);
+                switch (comboBox1.SelectedItem.ToString()){
+                    case "四参数":
+                        new_row["X0"] = arr[0];
+                        new_row["Y0"] = arr[1];
+                        double[] four_res_arr = tfs.four_trans(arr, dX_box.Text, dY_box.Text, theata_box.Text, m_box.Text);
+                        new_row["X1"] = four_res_arr[0];
+                        new_row["Y1"] = four_res_arr[1];
+                        dt4.Rows.Add(new_row);
+                        trans_res.Add(four_res_arr);
+                        break;
+                    case "七参数":
+                        new_row["X0"] = arr[0];
+                        new_row["Y0"] = arr[1];
+                        new_row["Z0"] = arr[2];
+                        double[] seven_res_arr = tfs.seven_trans(arr, Tx_box.Text, Ty_box.Text, Tz_box.Text, D_box.Text, Rx_box.Text, Ry_box.Text, Rz_box.Text);
+                        new_row["X1"] = seven_res_arr[0];
+                        new_row["Y1"] = seven_res_arr[1];
+                        new_row["Z1"] = seven_res_arr[2];
+                        dt4.Rows.Add(new_row);
+                        trans_res.Add(seven_res_arr);
+                        break;
+                    case "三参数":
+                        MessageBox.Show("开发中");
+                        break;
+                }
             }
         }
 
@@ -418,7 +413,122 @@ namespace Converter
             {
                 return;
             }
-            fo.ExportFile(save.FileName, four_trans_res);
+            fo.ExportFile(save.FileName, trans_res);
+        }
+        //设置是否输入转换参数
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if(checkBox1.Checked == false)
+            {
+                button12.Enabled = true;
+                foreach (Control c in groupBox1.Controls.OfType<TextBox>())
+                {
+                    TextBox tb = c as TextBox;
+                    tb.ReadOnly = true;
+                }
+                foreach (Control c in groupBox2.Controls.OfType<TextBox>())
+                {
+                    TextBox tb = c as TextBox;
+                    tb.ReadOnly = true;
+                }
+                foreach (Control c in groupBox3.Controls.OfType<TextBox>())
+                {
+                    TextBox tb = c as TextBox;
+                    tb.ReadOnly = true;
+                }
+            }
+            else if (checkBox1.Checked == true)
+            {
+                button12.Enabled = false;
+                foreach (Control c in groupBox1.Controls.OfType<TextBox>())
+                {
+                    TextBox tb = c as TextBox;
+                    tb.ReadOnly = false;
+                }
+                foreach (Control c in groupBox2.Controls.OfType<TextBox>())
+                {
+                    TextBox tb = c as TextBox;
+                    tb.ReadOnly = false;
+                }
+                foreach (Control c in groupBox3.Controls.OfType<TextBox>())
+                {
+                    TextBox tb = c as TextBox;
+                    tb.ReadOnly = false;
+                }
+            }
+        }
+        //计算转换参数
+        private void button12_Click(object sender, EventArgs e)
+        {
+            dt4.Rows.Clear();
+            trans_res.Clear();
+            OpenFileDialog open = new OpenFileDialog();
+            open.Filter = "文本文件(*.txt)|*.txt";
+            open.ShowDialog();
+            if (open.FileName == "")
+            {
+                return;
+            }
+            FileOperate fo = new FileOperate();
+            List<double[]> data = fo.ReadFile(open.FileName);
+            switch (comboBox1.SelectedItem.ToString())
+            {
+                case "四参数":
+                    //分离源坐标系和目标坐标系的坐标
+                    List<double[]> four_src = new List<double[]>();
+                    List<double[]> four_dst = new List<double[]>();
+                    foreach (double[] arr in data)
+                    {
+                        //datagridview显示
+                        DataRow new_row = dt4.NewRow();
+                        new_row["X0"] = arr[0];
+                        new_row["Y0"] = arr[1];
+                        new_row["X1"] = arr[2];
+                        new_row["Y1"] = arr[3];
+                        dt4.Rows.Add(new_row);
+                        double[] left = { arr[0], arr[1] };
+                        double[] right = { arr[2], arr[3] };
+                        four_src.Add(left);
+                        four_dst.Add(right);
+                    }
+                    _347 four_tfs = new _347();
+                    double[] four_param_arr = four_tfs.four_solve(four_src, four_dst);
+                    dX_box.Text = four_param_arr[0].ToString();
+                    dY_box.Text = four_param_arr[1].ToString();
+                    theata_box.Text = four_param_arr[2].ToString();
+                    m_box.Text = four_param_arr[3].ToString();
+                    break;
+                case "七参数":
+                    //分离源坐标系和目标坐标系的坐标
+                    List<double[]> seven_src = new List<double[]>();
+                    List<double[]> seven_dst = new List<double[]>();
+                    foreach (double[] arr in data)
+                    {
+                        //datagridview显示
+                        DataRow new_row = dt4.NewRow();
+                        new_row["X0"] = arr[0];
+                        new_row["Y0"] = arr[1];
+                        new_row["Z0"] = arr[2];
+                        new_row["X1"] = arr[3];
+                        new_row["Y1"] = arr[4];
+                        new_row["Z1"] = arr[5];
+                        dt4.Rows.Add(new_row);
+                        double[] left = { arr[0], arr[1],arr[2] };
+                        double[] right = { arr[3], arr[4],arr[5] };
+                        seven_src.Add(left);
+                        seven_dst.Add(right);
+                    }
+                    _347 seven_tfs = new _347();
+                    double[] seven_param_arr = seven_tfs.seven_solve(seven_src, seven_dst);
+                    Tx_box.Text = seven_param_arr[0].ToString();
+                    Ty_box.Text = seven_param_arr[1].ToString();
+                    Tz_box.Text = seven_param_arr[2].ToString();
+                    Rx_box.Text = seven_param_arr[3].ToString();
+                    Ry_box.Text = seven_param_arr[4].ToString();
+                    Rz_box.Text = seven_param_arr[5].ToString();
+                    D_box.Text = seven_param_arr[6].ToString();
+                    break;
+            }
         }
     }
 }
