@@ -93,6 +93,8 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button10 = new System.Windows.Forms.Button();
             this.dataGridView4 = new System.Windows.Forms.DataGridView();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.button9 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -400,6 +402,8 @@
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.button9);
+            this.tabPage5.Controls.Add(this.checkBox2);
             this.tabPage5.Controls.Add(this.button12);
             this.tabPage5.Controls.Add(this.checkBox1);
             this.tabPage5.Controls.Add(this.button11);
@@ -788,6 +792,27 @@
             this.dataGridView4.Size = new System.Drawing.Size(617, 335);
             this.dataGridView4.TabIndex = 0;
             // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(862, 43);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(108, 16);
+            this.checkBox2.TabIndex = 10;
+            this.checkBox2.Text = "手动输入已知点";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(862, 64);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(168, 23);
+            this.button9.TabIndex = 11;
+            this.button9.Text = "计算";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -886,6 +911,8 @@
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button button12;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.Button button9;
     }
 }
 

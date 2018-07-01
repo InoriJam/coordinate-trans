@@ -28,8 +28,9 @@ namespace Converter
             groupBox3.Location = new Point(724, 97);
             groupBox2.Visible = false;
             groupBox3.Visible = false;
-            checkBox1.Checked = true;
-            button12.Enabled = false;
+            //checkBox1.Checked = true;
+            //button12.Enabled = false;
+            button9.Visible = false;
             init_DataGridview();
         }
         BLH2XYZ conv = new BLH2XYZ();
@@ -559,6 +560,94 @@ namespace Converter
                         new_row["Y1"] = arr[4];
                         new_row["Z1"] = arr[5];
                         dt4.Rows.Add(new_row);
+                        double[] left = { arr[0], arr[1], arr[2] };
+                        double[] right = { arr[3], arr[4], arr[5] };
+                        three_src.Add(left);
+                        three_dst.Add(right);
+                    }
+                    _347 three_tfs = new _347();
+                    double[] three_param_arr = three_tfs.three_solve(three_src, three_dst);
+                    t_Dx_box.Text = three_param_arr[0].ToString();
+                    t_Dy_box.Text = three_param_arr[1].ToString();
+                    t_Dz_box.Text = three_param_arr[2].ToString();
+                    break;
+            }
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox2.Checked == true)
+            {
+                button9.Visible = true;
+                button12.Visible = false;
+            }
+            else if (checkBox2.Checked == false)
+            {
+                button9.Visible = false;
+                button12.Visible = true;
+            }
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            List<double[]> data = new List<double[]>();
+            foreach(DataRow row in dt4.Rows)
+            {
+                List<double> temp = new List<double>();
+                foreach(DataColumn col in dt4.Columns)
+                {
+                    temp.Add((double)row[col]);
+                }
+                double[] temp_arr = temp.ToArray();
+                data.Add(temp_arr);
+            }
+            switch (comboBox1.SelectedItem.ToString())
+            {
+                case "四参数":
+                    //分离源坐标系和目标坐标系的坐标
+                    List<double[]> four_src = new List<double[]>();
+                    List<double[]> four_dst = new List<double[]>();
+                    foreach (double[] arr in data)
+                    {
+                        double[] left = { arr[0], arr[1] };
+                        double[] right = { arr[2], arr[3] };
+                        four_src.Add(left);
+                        four_dst.Add(right);
+                    }
+                    _347 four_tfs = new _347();
+                    double[] four_param_arr = four_tfs.four_solve(four_src, four_dst);
+                    dX_box.Text = four_param_arr[0].ToString();
+                    dY_box.Text = four_param_arr[1].ToString();
+                    theata_box.Text = four_param_arr[2].ToString();
+                    m_box.Text = four_param_arr[3].ToString();
+                    break;
+                case "七参数":
+                    //分离源坐标系和目标坐标系的坐标
+                    List<double[]> seven_src = new List<double[]>();
+                    List<double[]> seven_dst = new List<double[]>();
+                    foreach (double[] arr in data)
+                    {
+                        double[] left = { arr[0], arr[1], arr[2] };
+                        double[] right = { arr[3], arr[4], arr[5] };
+                        seven_src.Add(left);
+                        seven_dst.Add(right);
+                    }
+                    _347 seven_tfs = new _347();
+                    double[] seven_param_arr = seven_tfs.seven_solve(seven_src, seven_dst);
+                    Tx_box.Text = seven_param_arr[0].ToString();
+                    Ty_box.Text = seven_param_arr[1].ToString();
+                    Tz_box.Text = seven_param_arr[2].ToString();
+                    Rx_box.Text = seven_param_arr[3].ToString();
+                    Ry_box.Text = seven_param_arr[4].ToString();
+                    Rz_box.Text = seven_param_arr[5].ToString();
+                    D_box.Text = seven_param_arr[6].ToString();
+                    break;
+                case "三参数":
+                    //分离源坐标系和目标坐标系的坐标
+                    List<double[]> three_src = new List<double[]>();
+                    List<double[]> three_dst = new List<double[]>();
+                    foreach (double[] arr in data)
+                    {
                         double[] left = { arr[0], arr[1], arr[2] };
                         double[] right = { arr[3], arr[4], arr[5] };
                         three_src.Add(left);
