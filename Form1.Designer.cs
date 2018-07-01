@@ -29,12 +29,8 @@
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
-            this.xyz = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.blh = new System.Windows.Forms.TextBox();
             this.select = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -55,6 +51,8 @@
             this.select3 = new System.Windows.Forms.ComboBox();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.button9 = new System.Windows.Forms.Button();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.button12 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button11 = new System.Windows.Forms.Button();
@@ -93,8 +91,7 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button10 = new System.Windows.Forms.Button();
             this.dataGridView4 = new System.Windows.Forms.DataGridView();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.button9 = new System.Windows.Forms.Button();
+            this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -106,6 +103,7 @@
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -118,15 +116,6 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // xyz
-            // 
-            this.xyz.Location = new System.Drawing.Point(39, 124);
-            this.xyz.Multiline = true;
-            this.xyz.Name = "xyz";
-            this.xyz.ReadOnly = true;
-            this.xyz.Size = new System.Drawing.Size(403, 318);
-            this.xyz.TabIndex = 7;
-            // 
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(906, 240);
@@ -136,15 +125,6 @@
             this.button2.Text = "XYZ转BLH";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // blh
-            // 
-            this.blh.Location = new System.Drawing.Point(476, 124);
-            this.blh.Multiline = true;
-            this.blh.Name = "blh";
-            this.blh.ReadOnly = true;
-            this.blh.Size = new System.Drawing.Size(403, 318);
-            this.blh.TabIndex = 9;
             // 
             // select
             // 
@@ -159,24 +139,6 @@
             this.select.Size = new System.Drawing.Size(121, 20);
             this.select.TabIndex = 10;
             this.select.SelectedIndexChanged += new System.EventHandler(this.select_SelectedIndexChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(39, 85);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(23, 12);
-            this.label1.TabIndex = 11;
-            this.label1.Text = "XYZ";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(474, 85);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(23, 12);
-            this.label2.TabIndex = 12;
-            this.label2.Text = "BLH";
             // 
             // label3
             // 
@@ -201,15 +163,12 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.dataGridView3);
             this.tabPage1.Controls.Add(this.button3);
             this.tabPage1.Controls.Add(this.select);
             this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.button1);
-            this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.xyz);
-            this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.button2);
-            this.tabPage1.Controls.Add(this.blh);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -421,6 +380,27 @@
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "三四七参数转换";
             this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(862, 64);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(168, 23);
+            this.button9.TabIndex = 11;
+            this.button9.Text = "计算";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(862, 43);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(108, 16);
+            this.checkBox2.TabIndex = 10;
+            this.checkBox2.Text = "手动输入已知点";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // button12
             // 
@@ -792,26 +772,17 @@
             this.dataGridView4.Size = new System.Drawing.Size(617, 335);
             this.dataGridView4.TabIndex = 0;
             // 
-            // checkBox2
+            // dataGridView3
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(862, 43);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(108, 16);
-            this.checkBox2.TabIndex = 10;
-            this.checkBox2.Text = "手动输入已知点";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
-            // 
-            // button9
-            // 
-            this.button9.Location = new System.Drawing.Point(862, 64);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(168, 23);
-            this.button9.TabIndex = 11;
-            this.button9.Text = "计算";
-            this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
+            this.dataGridView3.AllowUserToAddRows = false;
+            this.dataGridView3.AllowUserToDeleteRows = false;
+            this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView3.Location = new System.Drawing.Point(46, 39);
+            this.dataGridView3.Name = "dataGridView3";
+            this.dataGridView3.ReadOnly = true;
+            this.dataGridView3.RowTemplate.Height = 23;
+            this.dataGridView3.Size = new System.Drawing.Size(758, 414);
+            this.dataGridView3.TabIndex = 15;
             // 
             // Form1
             // 
@@ -840,6 +811,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -847,12 +819,8 @@
         #endregion
 
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox xyz;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox blh;
         private System.Windows.Forms.ComboBox select;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
@@ -913,6 +881,7 @@
         private System.Windows.Forms.Button button12;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.DataGridView dataGridView3;
     }
 }
 

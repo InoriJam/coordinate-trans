@@ -35,36 +35,9 @@ namespace Converter
                 f = value;
             }
         }
-        //读取外部txt文件
-        public List<double[]> data_arr = new List<double[]>();
-        public string raw_data = "";
-        public void ReadFile(string path)
-        {
-            raw_data = "";
-            data_arr.Clear();
-            FileStream fs = new FileStream(path, FileMode.Open);
-            StreamReader rd = new StreamReader(fs);
-            List<string> data = new List<string>();
-            while (true)
-            {
-                string temp = rd.ReadLine();
-                if (temp == null)
-                {
-                    break;
-                }
-                data.Add(temp);
-                raw_data += temp + "\r\n";
-            }
-            foreach (string line in data) {
-                data_arr.Add( Array.ConvertAll<string, double>(line.Split(' '), s => double.Parse(s)));
-            }
-            rd.Close();
-            fs.Close();
-        }
         //大地坐标转空间直角坐标
         public double[] sub_BLH2XYZ(double[] BLH_arr)
         {
-            //double []BLH_arr = ReadFile(path);
             double lon = BLH_arr[0];
             double lat = BLH_arr[1];
             double H1 = BLH_arr[2];
@@ -80,7 +53,6 @@ namespace Converter
         //空间直角转大地坐标
         public double[] sub_XYZ2BLH(double[] XYZ_arr)
         {
-            //double[] XYZ_arr = ReadFile(path);
             double X, Y, Z, b, e2, e4, L, t0, N, B;
             X = XYZ_arr[0];
             Y = XYZ_arr[1];

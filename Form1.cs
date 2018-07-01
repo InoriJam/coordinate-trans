@@ -28,17 +28,18 @@ namespace Converter
             groupBox3.Location = new Point(724, 97);
             groupBox2.Visible = false;
             groupBox3.Visible = false;
-            //checkBox1.Checked = true;
-            //button12.Enabled = false;
             button9.Visible = false;
+            button11.Enabled = false;
             init_DataGridview();
         }
         BLH2XYZ conv = new BLH2XYZ();
         Radius radius = new Radius();
-        string res = "";
+        List<double[]> XYZBLH_res = new List<double[]>();
         //大地转空间
         private void button1_Click(object sender, EventArgs e)
         {
+            XYZBLH_res.Clear();
+            dt3.Rows.Clear();
             OpenFileDialog open = new OpenFileDialog();
             open.Filter = "文本文件(*.txt)|*.txt";
             open.ShowDialog();
@@ -46,19 +47,27 @@ namespace Converter
             {
                 return;
             }
-            conv.ReadFile(open.FileName);
-            blh.Text = conv.raw_data;
-            res = "";
-            foreach(double[] BLH_arr in conv.data_arr)
+            FileOperate fo = new FileOperate();
+            List<double[]> data = fo.ReadFile(open.FileName);
+            foreach (double[] arr in data)
             {
-                double[] XYZ = conv.sub_BLH2XYZ(BLH_arr);
-                res += XYZ[0].ToString()+" "+XYZ[1].ToString()+" "+XYZ[2].ToString()+"\r\n";
+                double[] temp = conv.sub_BLH2XYZ(arr);
+                DataRow new_row = dt3.NewRow();
+                new_row["L"] = arr[0];
+                new_row["B"] = arr[1];
+                new_row["H"] = arr[2];
+                new_row["X"] = temp[0];
+                new_row["Y"] = temp[1];
+                new_row["Z"] = temp[2];
+                XYZBLH_res.Add(temp);
+                dt3.Rows.Add(new_row);
             }
-            xyz.Text = res;
         }
         //空间转大地
         private void button2_Click(object sender, EventArgs e)
         {
+            XYZBLH_res.Clear();
+            dt3.Rows.Clear();
             OpenFileDialog open = new OpenFileDialog();
             open.Filter = "文本文件(*.txt)|*.txt";
             open.ShowDialog();
@@ -66,15 +75,21 @@ namespace Converter
             {
                 return;
             }
-            conv.ReadFile(open.FileName);
-            xyz.Text = conv.raw_data;
-            res = "";
-            foreach (double[] XYZ_arr in conv.data_arr)
+            FileOperate fo = new FileOperate();
+            List<double[]> data = fo.ReadFile(open.FileName);
+            foreach(double[] arr in data)
             {
-                double[] BLH = conv.sub_XYZ2BLH(XYZ_arr);
-                res += BLH[0].ToString() + " " + BLH[1].ToString() + " " + BLH[2].ToString() + "\r\n";
+                double[] temp = conv.sub_XYZ2BLH(arr);
+                DataRow new_row = dt3.NewRow();
+                new_row["X"] = arr[0];
+                new_row["Y"] = arr[1];
+                new_row["Z"] = arr[2];
+                new_row["L"] = temp[0];
+                new_row["B"] = temp[1];
+                new_row["H"] = temp[2];
+                XYZBLH_res.Add(temp);
+                dt3.Rows.Add(new_row);
             }
-            blh.Text = res;
         }
         //选择椭球
         private void select_SelectedIndexChanged(object sender, EventArgs e)
@@ -96,7 +111,7 @@ namespace Converter
             }
             
         }
-        //导出结果
+        //导出BLHXYZ结果
         private void button3_Click(object sender, EventArgs e)
         {
             SaveFileDialog save = new SaveFileDialog();
@@ -106,10 +121,8 @@ namespace Converter
             {
                 return;
             }
-            FileStream fs = new FileStream(save.FileName, FileMode.Create);
-            StreamWriter wt = new StreamWriter(fs);
-            wt.Write(res);
-            wt.Close();
+            FileOperate fo = new FileOperate();
+            fo.ExportFile(save.FileName, XYZBLH_res);
         }
         //初始化Tab2的DataGridView
         DataTable dt = new DataTable();
@@ -144,11 +157,15 @@ namespace Converter
             dt2.Columns.Add("y", typeof(double));
             dt2.Columns.Add("x", typeof(double));
             dataGridView2.DataSource = dt2;
-            //四参数转换的datagridview
-            /*dt4.Columns.Add("X0", typeof(double));
-            dt4.Columns.Add("Y0", typeof(double));
-            dt4.Columns.Add("X1", typeof(double));
-            dt4.Columns.Add("Y1", typeof(double));*/
+            //BLH2XYZ的datagridview
+            dt3.Columns.Add("X", typeof(double));
+            dt3.Columns.Add("Y", typeof(double));
+            dt3.Columns.Add("Z", typeof(double));
+            dt3.Columns.Add("B", typeof(double));
+            dt3.Columns.Add("L", typeof(double));
+            dt3.Columns.Add("H", typeof(double));
+            dataGridView3.DataSource = dt3;
+            //参数转换datagridview
             dataGridView4.DataSource = dt4;
         }
         //计算M N R RA
@@ -418,6 +435,7 @@ namespace Converter
                         break;
                 }
             }
+            button10.Enabled = true;
         }
 
         private void button11_Click(object sender, EventArgs e)
