@@ -273,7 +273,7 @@ namespace Converter
             }
             foreach(DataRow row in dt2.Rows)
             {
-                 double[]yx_arr = gauss.gauss_positive((double)row["L"], (double)row["B"]);
+                 double[]yx_arr = gauss.gauss_positive((double)row["L"], (double)row["B"], checkBox3);
                  gauss_positive_res.Add(yx_arr);
                  row["y"] = yx_arr[0];
                  row["x"] = yx_arr[1];
@@ -435,7 +435,7 @@ namespace Converter
                         break;
                 }
             }
-            button10.Enabled = true;
+            button11.Enabled = true;
         }
 
         private void button11_Click(object sender, EventArgs e)
