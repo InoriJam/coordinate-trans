@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Converter
 {
@@ -47,7 +48,7 @@ namespace Converter
             }
         }
         //高斯正算
-        public double[] gauss_positive(double L, double B)
+        public double[] gauss_positive(double L, double B, Control control)
         {
             //计算中央子午线
             int no = (int)(L / width);
@@ -80,7 +81,11 @@ namespace Converter
             double x = X + N / (2*Math.Pow(p,2)) * Math.Sin(B) * Math.Cos(B) * l * l + N / (24 * Math.Pow(p, 4)) * Math.Sin(B) * Math.Pow(Math.Cos(B), 3) * (5 - t * t + 9 * n2 + 4 * n2 * n2) * Math.Pow(l, 4) + N / (720 * Math.Pow(p, 6)) * Math.Sin(B) * Math.Pow(Math.Cos(B), 5) * (61 - 58 * t * t + Math.Pow(t, 4)) * Math.Pow(l, 6);
             double y = N/p * Math.Cos(B) * l + N / (6 * Math.Pow(p, 3)) * Math.Pow(Math.Cos(B), 3) * (1 - t * t + n2) * Math.Pow(l, 3) + N / (120 * Math.Pow(p, 5)) * Math.Pow(Math.Cos(B), 5) * (5 - 18 * t * t + Math.Pow(t, 4) + 14 * n2 - 58 * n2 * t * t) * Math.Pow(l, 5);
             y = y + 500000;
-            y = Convert.ToDouble((no + 1).ToString() + y.ToString());
+            CheckBox checkbox = control as CheckBox;
+            if (checkbox.Checked == true)
+            {
+                y = Convert.ToDouble((no + 1).ToString() + y.ToString());
+            }
             double[] yx = { y, x };
             return yx;
         }

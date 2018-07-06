@@ -71,7 +71,7 @@ namespace Converter
                 string temp = "";
                 foreach (double num in ele)
                 {
-                    temp += string.Format("{0:f3}", num) + "\t";
+                    temp += string.Format("{0:f8}", num) + "\t";
                 }
                 temp = temp.Substring(0, temp.Length - 1);
                 wt.WriteLine(temp);
